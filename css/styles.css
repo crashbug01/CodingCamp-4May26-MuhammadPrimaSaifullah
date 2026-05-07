@@ -1,0 +1,476 @@
+/* =============================================================================
+   To-Do Life Dashboard — styles.css
+   Tasks 2.1–2.5: Base, Greeting, Focus Timer, To-Do List, Quick Links
+   ============================================================================= */
+
+/* =============================================================================
+   2.1 — CSS Reset / Normalisation & Base Layout
+   ============================================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px; /* root; 1rem = 16px, body min enforced below */
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  font-size: 1rem;       /* 16px — above the 14px minimum */
+  line-height: 1.6;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  color: #1a1a2e;
+}
+
+/* Centered main content column */
+.dashboard {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Screen-reader-only utility (used for <label class="sr-only">) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =============================================================================
+   Widget card / panel — shared across all sections
+   ============================================================================= */
+
+.widget {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.widget-title {
+  font-size: 0.8125rem;   /* 13px — intentionally small label */
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a8fa8;
+  margin-bottom: 1.25rem;
+}
+
+/* =============================================================================
+   Shared form controls
+   ============================================================================= */
+
+input[type="text"],
+input[type="url"] {
+  font-family: inherit;
+  font-size: 0.9375rem;   /* 15px */
+  line-height: 1.4;
+  color: #1a1a2e;
+  background-color: #f7f8fa;
+  border: 1.5px solid #d1d5e0;
+  border-radius: 7px;
+  padding: 0.5rem 0.75rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  min-width: 0;           /* allow flex shrink */
+}
+
+input[type="text"]:focus,
+input[type="url"]:focus {
+  outline: none;
+  border-color: #5b6af0;
+  box-shadow: 0 0 0 3px rgba(91, 106, 240, 0.18);
+}
+
+input[type="text"]::placeholder,
+input[type="url"]::placeholder {
+  color: #b0b5c8;
+}
+
+/* Generic button base */
+button {
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  border-radius: 7px;
+  padding: 0.5rem 1.1rem;
+  transition: background-color 0.15s ease, opacity 0.15s ease,
+    box-shadow 0.15s ease;
+  white-space: nowrap;
+}
+
+button:focus-visible {
+  outline: 3px solid #5b6af0;
+  outline-offset: 2px;
+}
+
+/* Primary accent button (Add, Start, etc.) */
+button:not([class]) {
+  background-color: #5b6af0;
+  color: #ffffff;
+}
+
+button:not([class]):hover:not(:disabled) {
+  background-color: #4a58e0;
+  box-shadow: 0 2px 6px rgba(91, 106, 240, 0.35);
+}
+
+button:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* =============================================================================
+   Shared validation error
+   ============================================================================= */
+
+.validation-error {
+  font-size: 0.8125rem;   /* 13px */
+  color: #d93025;
+  font-weight: 500;
+  min-height: 1.25rem;    /* prevents layout shift when message appears/clears */
+  margin-top: 0.35rem;
+}
+
+/* =============================================================================
+   2.2 — Greeting Widget
+   ============================================================================= */
+
+#greeting-widget {
+  text-align: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+#time {
+  font-size: 3.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #1a1a2e;
+  line-height: 1.1;
+}
+
+#date {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-top: 0.4rem;
+}
+
+#greeting {
+  font-size: 1.125rem;
+  color: #8a8fa8;
+  margin-top: 0.25rem;
+  font-weight: 400;
+}
+
+/* =============================================================================
+   2.3 — Focus Timer
+   ============================================================================= */
+
+#focus-timer {
+  text-align: center;
+}
+
+#timer-display {
+  font-family: "Courier New", Courier, "Lucida Console", monospace;
+  font-size: 4.5rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #1a1a2e;
+  line-height: 1;
+  margin-bottom: 1.5rem;
+}
+
+.timer-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Individual timer buttons — override generic base with named classes */
+#btn-start {
+  background-color: #22c55e;
+  color: #ffffff;
+}
+
+#btn-start:hover:not(:disabled) {
+  background-color: #16a34a;
+  box-shadow: 0 2px 6px rgba(34, 197, 94, 0.35);
+}
+
+#btn-stop {
+  background-color: #f59e0b;
+  color: #ffffff;
+}
+
+#btn-stop:hover:not(:disabled) {
+  background-color: #d97706;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.35);
+}
+
+#btn-reset {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+#btn-reset:hover:not(:disabled) {
+  background-color: #d1d5db;
+}
+
+/* Disabled state — explicit for timer buttons (also inherits generic opacity) */
+#btn-start:disabled,
+#btn-stop:disabled,
+#btn-reset:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Session-complete indicator */
+.timer-ended-indicator {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #16a34a;
+  background-color: #dcfce7;
+  border: 1.5px solid #86efac;
+  border-radius: 6px;
+  padding: 0.35rem 0.9rem;
+  letter-spacing: 0.01em;
+}
+
+/* Hide when [hidden] attribute is present */
+.timer-ended-indicator[hidden] {
+  display: none;
+}
+
+/* =============================================================================
+   2.4 — To-Do List
+   ============================================================================= */
+
+/* Add-task row */
+.todo-add-row {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.todo-add-row input[type="text"] {
+  flex: 1;
+}
+
+.todo-add-row button {
+  background-color: #5b6af0;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.todo-add-row button:hover:not(:disabled) {
+  background-color: #4a58e0;
+  box-shadow: 0 2px 6px rgba(91, 106, 240, 0.35);
+}
+
+/* Task list */
+#task-list {
+  list-style: none;
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#task-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 7px;
+  background-color: #f7f8fa;
+  border: 1.5px solid #e5e7eb;
+  transition: border-color 0.12s ease;
+}
+
+#task-list li:hover {
+  border-color: #c7cad8;
+}
+
+/* Completion toggle checkbox */
+#task-list li input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
+  accent-color: #5b6af0;
+  cursor: pointer;
+}
+
+/* Task text span */
+#task-list li .task-text {
+  flex: 1;
+  font-size: 0.9375rem;
+  color: #1a1a2e;
+  word-break: break-word;
+}
+
+/* Completed task text */
+#task-list li.completed .task-text {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+/* Inline edit input inside a task row */
+#task-list li input[type="text"].task-edit-input {
+  flex: 1;
+  font-size: 0.9375rem;
+  background-color: #ffffff;
+}
+
+/* Edit and Delete buttons inside task rows */
+#task-list li .btn-edit,
+#task-list li .btn-delete {
+  flex-shrink: 0;
+  font-size: 0.8125rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 5px;
+}
+
+#task-list li .btn-edit {
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+
+#task-list li .btn-edit:hover {
+  background-color: #c7d2fe;
+}
+
+#task-list li .btn-delete {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+#task-list li .btn-delete:hover {
+  background-color: #fecaca;
+}
+
+/* Save button shown during inline edit */
+#task-list li .btn-save {
+  flex-shrink: 0;
+  font-size: 0.8125rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 5px;
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+#task-list li .btn-save:hover {
+  background-color: #bbf7d0;
+}
+
+/* =============================================================================
+   2.5 — Quick Links
+   ============================================================================= */
+
+/* Add-link form row */
+.links-add-form {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.links-add-form input[type="text"],
+.links-add-form input[type="url"] {
+  flex: 1;
+  min-width: 8rem;
+}
+
+.links-add-form button {
+  background-color: #5b6af0;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.links-add-form button:hover:not(:disabled) {
+  background-color: #4a58e0;
+  box-shadow: 0 2px 6px rgba(91, 106, 240, 0.35);
+}
+
+/* Links container — flex wrap */
+#links-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}
+
+/* Individual link item wrapper */
+.link-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border-radius: 7px;
+  overflow: hidden;
+  border: 1.5px solid #d1d5e0;
+  background-color: #f7f8fa;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.link-item:hover {
+  border-color: #5b6af0;
+  box-shadow: 0 2px 6px rgba(91, 106, 240, 0.18);
+}
+
+/* The clickable link button */
+.link-item .btn-link {
+  background-color: transparent;
+  color: #3730a3;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.45rem 0.85rem;
+  border-radius: 0;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.link-item .btn-link:hover {
+  background-color: #e0e7ff;
+  box-shadow: none;
+}
+
+/* Small delete control beside each link */
+.link-item .btn-link-delete {
+  background-color: transparent;
+  color: #9ca3af;
+  font-size: 0.8rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 0;
+  border-left: 1.5px solid #d1d5e0;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.link-item .btn-link-delete:hover {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  box-shadow: none;
+}
