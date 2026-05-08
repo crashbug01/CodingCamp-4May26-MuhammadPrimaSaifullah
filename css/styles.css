@@ -4,6 +4,100 @@
    ============================================================================= */
 
 /* =============================================================================
+   CSS Custom Properties — Light Theme (default)
+   ============================================================================= */
+
+:root {
+  --color-bg: #f0f2f5;
+  --color-surface: #ffffff;
+  --color-text-primary: #1a1a2e;
+  --color-text-muted: #6b7280;
+  --color-text-subtle: #8a8fa8;
+  --color-border: #d1d5e0;
+  --color-border-light: #e5e7eb;
+  --color-accent: #5b6af0;
+  --color-accent-hover: #4a58e0;
+  --color-accent-light: #e0e7ff;
+  --color-accent-dark: #3730a3;
+  --color-input-bg: #f7f8fa;
+  --color-placeholder: #b0b5c8;
+  --color-error: #d93025;
+  --color-success: #16a34a;
+  --color-success-bg: #dcfce7;
+  --color-success-border: #86efac;
+  --color-timer-start: #22c55e;
+  --color-timer-start-hover: #16a34a;
+  --color-timer-stop: #f59e0b;
+  --color-timer-stop-hover: #d97706;
+  --color-timer-reset: #e5e7eb;
+  --color-timer-reset-text: #374151;
+  --color-timer-reset-hover: #d1d5db;
+  --color-task-edit-bg: #e0e7ff;
+  --color-task-edit-text: #3730a3;
+  --color-task-edit-hover: #c7d2fe;
+  --color-task-delete-bg: #fee2e2;
+  --color-task-delete-text: #b91c1c;
+  --color-task-delete-hover: #fecaca;
+  --color-task-save-bg: #dcfce7;
+  --color-task-save-text: #15803d;
+  --color-task-save-hover: #bbf7d0;
+  --color-task-completed: #9ca3af;
+  --color-link-text: #3730a3;
+  --color-link-delete: #9ca3af;
+  --color-shadow: rgba(0, 0, 0, 0.08);
+  --color-shadow-sm: rgba(0, 0, 0, 0.06);
+  --color-accent-shadow: rgba(91, 106, 240, 0.35);
+  --color-accent-ring: rgba(91, 106, 240, 0.18);
+}
+
+/* =============================================================================
+   CSS Custom Properties — Dark Theme
+   ============================================================================= */
+
+[data-theme="dark"] {
+  --color-bg: #0f1117;
+  --color-surface: #1e2130;
+  --color-text-primary: #e8eaf0;
+  --color-text-muted: #9ca3af;
+  --color-text-subtle: #6b7280;
+  --color-border: #2e3347;
+  --color-border-light: #2e3347;
+  --color-accent: #7c8ff5;
+  --color-accent-hover: #6b7ee8;
+  --color-accent-light: #1e2a5e;
+  --color-accent-dark: #a5b4fc;
+  --color-input-bg: #161926;
+  --color-placeholder: #4b5563;
+  --color-error: #f87171;
+  --color-success: #4ade80;
+  --color-success-bg: #14532d;
+  --color-success-border: #166534;
+  --color-timer-start: #22c55e;
+  --color-timer-start-hover: #16a34a;
+  --color-timer-stop: #f59e0b;
+  --color-timer-stop-hover: #d97706;
+  --color-timer-reset: #374151;
+  --color-timer-reset-text: #d1d5db;
+  --color-timer-reset-hover: #4b5563;
+  --color-task-edit-bg: #1e2a5e;
+  --color-task-edit-text: #a5b4fc;
+  --color-task-edit-hover: #2d3a7a;
+  --color-task-delete-bg: #450a0a;
+  --color-task-delete-text: #fca5a5;
+  --color-task-delete-hover: #5c1010;
+  --color-task-save-bg: #14532d;
+  --color-task-save-text: #4ade80;
+  --color-task-save-hover: #166534;
+  --color-task-completed: #6b7280;
+  --color-link-text: #a5b4fc;
+  --color-link-delete: #6b7280;
+  --color-shadow: rgba(0, 0, 0, 0.3);
+  --color-shadow-sm: rgba(0, 0, 0, 0.2);
+  --color-accent-shadow: rgba(124, 143, 245, 0.35);
+  --color-accent-ring: rgba(124, 143, 245, 0.25);
+}
+
+/* =============================================================================
    2.1 — CSS Reset / Normalisation & Base Layout
    ============================================================================= */
 
@@ -25,8 +119,8 @@ body {
   font-size: 1rem;       /* 16px — above the 14px minimum */
   line-height: 1.6;
   min-height: 100vh;
-  background-color: #f0f2f5;
-  color: #1a1a2e;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
 }
 
 /* Centered main content column */
@@ -57,10 +151,10 @@ body {
    ============================================================================= */
 
 .widget {
-  background-color: #ffffff;
+  background-color: var(--color-surface);
   border-radius: 12px;
   padding: 1.75rem 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 0 1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px var(--color-shadow), 0 0 1px var(--color-shadow-sm);
 }
 
 .widget-title {
@@ -68,7 +162,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #8a8fa8;
+  color: var(--color-text-subtle);
   margin-bottom: 1.25rem;
 }
 
@@ -81,9 +175,9 @@ input[type="url"] {
   font-family: inherit;
   font-size: 0.9375rem;   /* 15px */
   line-height: 1.4;
-  color: #1a1a2e;
-  background-color: #f7f8fa;
-  border: 1.5px solid #d1d5e0;
+  color: var(--color-text-primary);
+  background-color: var(--color-input-bg);
+  border: 1.5px solid var(--color-border);
   border-radius: 7px;
   padding: 0.5rem 0.75rem;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -93,13 +187,13 @@ input[type="url"] {
 input[type="text"]:focus,
 input[type="url"]:focus {
   outline: none;
-  border-color: #5b6af0;
-  box-shadow: 0 0 0 3px rgba(91, 106, 240, 0.18);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-ring);
 }
 
 input[type="text"]::placeholder,
 input[type="url"]::placeholder {
-  color: #b0b5c8;
+  color: var(--color-placeholder);
 }
 
 /* Generic button base */
@@ -117,19 +211,19 @@ button {
 }
 
 button:focus-visible {
-  outline: 3px solid #5b6af0;
+  outline: 3px solid var(--color-accent);
   outline-offset: 2px;
 }
 
 /* Primary accent button (Add, Start, etc.) */
 button:not([class]) {
-  background-color: #5b6af0;
-  color: #ffffff;
+  background-color: var(--color-accent);
+  color: var(--color-surface);
 }
 
 button:not([class]):hover:not(:disabled) {
-  background-color: #4a58e0;
-  box-shadow: 0 2px 6px rgba(91, 106, 240, 0.35);
+  background-color: var(--color-accent-hover);
+  box-shadow: 0 2px 6px var(--color-accent-shadow);
 }
 
 button:disabled {
@@ -144,10 +238,40 @@ button:disabled {
 
 .validation-error {
   font-size: 0.8125rem;   /* 13px */
-  color: #d93025;
+  color: var(--color-error);
   font-weight: 500;
   min-height: 1.25rem;    /* prevents layout shift when message appears/clears */
   margin-top: 0.35rem;
+}
+
+/* =============================================================================
+   App Header & Theme Toggle
+   ============================================================================= */
+
+.app-header {
+  width: 100%;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.btn-theme-toggle {
+  background: transparent;
+  border: 1.5px solid var(--color-border);
+  color: var(--color-text-muted);
+  border-radius: 7px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-theme-toggle:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 /* =============================================================================
@@ -164,19 +288,19 @@ button:disabled {
   font-size: 3.5rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: #1a1a2e;
+  color: var(--color-text-primary);
   line-height: 1.1;
 }
 
 #date {
   font-size: 1rem;
-  color: #6b7280;
+  color: var(--color-text-muted);
   margin-top: 0.4rem;
 }
 
 #greeting {
   font-size: 1.125rem;
-  color: #8a8fa8;
+  color: var(--color-text-subtle);
   margin-top: 0.25rem;
   font-weight: 400;
 }
@@ -194,7 +318,7 @@ button:disabled {
   font-size: 4.5rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: #1a1a2e;
+  color: var(--color-text-primary);
   line-height: 1;
   margin-bottom: 1.5rem;
 }
@@ -208,32 +332,32 @@ button:disabled {
 
 /* Individual timer buttons — override generic base with named classes */
 #btn-start {
-  background-color: #22c55e;
+  background-color: var(--color-timer-start);
   color: #ffffff;
 }
 
 #btn-start:hover:not(:disabled) {
-  background-color: #16a34a;
+  background-color: var(--color-timer-start-hover);
   box-shadow: 0 2px 6px rgba(34, 197, 94, 0.35);
 }
 
 #btn-stop {
-  background-color: #f59e0b;
+  background-color: var(--color-timer-stop);
   color: #ffffff;
 }
 
 #btn-stop:hover:not(:disabled) {
-  background-color: #d97706;
+  background-color: var(--color-timer-stop-hover);
   box-shadow: 0 2px 6px rgba(245, 158, 11, 0.35);
 }
 
 #btn-reset {
-  background-color: #e5e7eb;
-  color: #374151;
+  background-color: var(--color-timer-reset);
+  color: var(--color-timer-reset-text);
 }
 
 #btn-reset:hover:not(:disabled) {
-  background-color: #d1d5db;
+  background-color: var(--color-timer-reset-hover);
 }
 
 /* Disabled state — explicit for timer buttons (also inherits generic opacity) */
@@ -251,9 +375,9 @@ button:disabled {
   margin-top: 1rem;
   font-size: 1rem;
   font-weight: 700;
-  color: #16a34a;
-  background-color: #dcfce7;
-  border: 1.5px solid #86efac;
+  color: var(--color-success);
+  background-color: var(--color-success-bg);
+  border: 1.5px solid var(--color-success-border);
   border-radius: 6px;
   padding: 0.35rem 0.9rem;
   letter-spacing: 0.01em;
@@ -280,14 +404,14 @@ button:disabled {
 }
 
 .todo-add-row button {
-  background-color: #5b6af0;
-  color: #ffffff;
+  background-color: var(--color-accent);
+  color: var(--color-surface);
   flex-shrink: 0;
 }
 
 .todo-add-row button:hover:not(:disabled) {
-  background-color: #4a58e0;
-  box-shadow: 0 2px 6px rgba(91, 106, 240, 0.35);
+  background-color: var(--color-accent-hover);
+  box-shadow: 0 2px 6px var(--color-accent-shadow);
 }
 
 /* Task list */
@@ -305,13 +429,13 @@ button:disabled {
   gap: 0.6rem;
   padding: 0.55rem 0.75rem;
   border-radius: 7px;
-  background-color: #f7f8fa;
-  border: 1.5px solid #e5e7eb;
+  background-color: var(--color-input-bg);
+  border: 1.5px solid var(--color-border-light);
   transition: border-color 0.12s ease;
 }
 
 #task-list li:hover {
-  border-color: #c7cad8;
+  border-color: var(--color-border);
 }
 
 /* Completion toggle checkbox */
@@ -319,7 +443,7 @@ button:disabled {
   width: 1.1rem;
   height: 1.1rem;
   flex-shrink: 0;
-  accent-color: #5b6af0;
+  accent-color: var(--color-accent);
   cursor: pointer;
 }
 
@@ -327,21 +451,21 @@ button:disabled {
 #task-list li .task-text {
   flex: 1;
   font-size: 0.9375rem;
-  color: #1a1a2e;
+  color: var(--color-text-primary);
   word-break: break-word;
 }
 
 /* Completed task text */
 #task-list li.completed .task-text {
   text-decoration: line-through;
-  color: #9ca3af;
+  color: var(--color-task-completed);
 }
 
 /* Inline edit input inside a task row */
 #task-list li input[type="text"].task-edit-input {
   flex: 1;
   font-size: 0.9375rem;
-  background-color: #ffffff;
+  background-color: var(--color-surface);
 }
 
 /* Edit and Delete buttons inside task rows */
@@ -354,21 +478,21 @@ button:disabled {
 }
 
 #task-list li .btn-edit {
-  background-color: #e0e7ff;
-  color: #3730a3;
+  background-color: var(--color-task-edit-bg);
+  color: var(--color-task-edit-text);
 }
 
 #task-list li .btn-edit:hover {
-  background-color: #c7d2fe;
+  background-color: var(--color-task-edit-hover);
 }
 
 #task-list li .btn-delete {
-  background-color: #fee2e2;
-  color: #b91c1c;
+  background-color: var(--color-task-delete-bg);
+  color: var(--color-task-delete-text);
 }
 
 #task-list li .btn-delete:hover {
-  background-color: #fecaca;
+  background-color: var(--color-task-delete-hover);
 }
 
 /* Save button shown during inline edit */
@@ -377,12 +501,12 @@ button:disabled {
   font-size: 0.8125rem;
   padding: 0.3rem 0.65rem;
   border-radius: 5px;
-  background-color: #dcfce7;
-  color: #15803d;
+  background-color: var(--color-task-save-bg);
+  color: var(--color-task-save-text);
 }
 
 #task-list li .btn-save:hover {
-  background-color: #bbf7d0;
+  background-color: var(--color-task-save-hover);
 }
 
 /* =============================================================================
@@ -404,14 +528,14 @@ button:disabled {
 }
 
 .links-add-form button {
-  background-color: #5b6af0;
-  color: #ffffff;
+  background-color: var(--color-accent);
+  color: var(--color-surface);
   flex-shrink: 0;
 }
 
 .links-add-form button:hover:not(:disabled) {
-  background-color: #4a58e0;
-  box-shadow: 0 2px 6px rgba(91, 106, 240, 0.35);
+  background-color: var(--color-accent-hover);
+  box-shadow: 0 2px 6px var(--color-accent-shadow);
 }
 
 /* Links container — flex wrap */
@@ -429,20 +553,20 @@ button:disabled {
   gap: 0;
   border-radius: 7px;
   overflow: hidden;
-  border: 1.5px solid #d1d5e0;
-  background-color: #f7f8fa;
+  border: 1.5px solid var(--color-border);
+  background-color: var(--color-input-bg);
   transition: border-color 0.12s ease, box-shadow 0.12s ease;
 }
 
 .link-item:hover {
-  border-color: #5b6af0;
-  box-shadow: 0 2px 6px rgba(91, 106, 240, 0.18);
+  border-color: var(--color-accent);
+  box-shadow: 0 2px 6px var(--color-accent-ring);
 }
 
 /* The clickable link button */
 .link-item .btn-link {
   background-color: transparent;
-  color: #3730a3;
+  color: var(--color-link-text);
   font-size: 0.9rem;
   font-weight: 500;
   padding: 0.45rem 0.85rem;
@@ -453,24 +577,106 @@ button:disabled {
 }
 
 .link-item .btn-link:hover {
-  background-color: #e0e7ff;
+  background-color: var(--color-accent-light);
   box-shadow: none;
 }
 
 /* Small delete control beside each link */
 .link-item .btn-link-delete {
   background-color: transparent;
-  color: #9ca3af;
+  color: var(--color-link-delete);
   font-size: 0.8rem;
   padding: 0.45rem 0.55rem;
   border-radius: 0;
-  border-left: 1.5px solid #d1d5e0;
+  border-left: 1.5px solid var(--color-border);
   line-height: 1;
   cursor: pointer;
 }
 
 .link-item .btn-link-delete:hover {
-  background-color: #fee2e2;
-  color: #b91c1c;
+  background-color: var(--color-task-delete-bg);
+  color: var(--color-task-delete-text);
   box-shadow: none;
+}
+
+/* Name Input Row (Greeting Widget) */
+.name-input-row {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.name-input-row input[type="text"] {
+  flex: 1;
+  max-width: 260px;
+}
+.name-input-row button {
+  background-color: var(--color-accent);
+  color: var(--color-surface);
+  flex-shrink: 0;
+}
+.name-input-row button:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  box-shadow: 0 2px 6px var(--color-accent-shadow);
+}
+
+/* Duration Row (Focus Timer) */
+.duration-row {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+input[type="number"]#duration-input {
+  font-family: inherit;
+  font-size: 0.9375rem;
+  color: var(--color-text-primary);
+  background-color: var(--color-input-bg);
+  border: 1.5px solid var(--color-border);
+  border-radius: 7px;
+  padding: 0.5rem 0.75rem;
+  width: 5rem;
+  text-align: center;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+input[type="number"]#duration-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-ring);
+}
+input[type="number"]#duration-input:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+.duration-row button {
+  background-color: var(--color-accent);
+  color: var(--color-surface);
+}
+.duration-row button:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  box-shadow: 0 2px 6px var(--color-accent-shadow);
+}
+
+/* Sort Row (To-Do List) */
+.sort-row {
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+#task-sort {
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  background-color: var(--color-input-bg);
+  border: 1.5px solid var(--color-border);
+  border-radius: 7px;
+  padding: 0.4rem 0.65rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+#task-sort:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-ring);
 }

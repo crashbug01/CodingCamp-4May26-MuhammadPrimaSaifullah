@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
+    <header class="app-header">
+      <button id="btn-theme-toggle" type="button" class="btn-theme-toggle">Dark Mode</button>
+    </header>
+
     <main class="dashboard">
 
       <!-- Greeting Widget -->
@@ -14,6 +18,11 @@
         <div id="time" aria-live="polite" aria-label="Current time"></div>
         <div id="date" aria-label="Current date"></div>
         <div id="greeting" aria-label="Greeting message"></div>
+        <div class="name-input-row">
+          <label for="name-input" class="sr-only">Your name</label>
+          <input id="name-input" type="text" maxlength="50" placeholder="Enter your name…" autocomplete="off" />
+          <button id="btn-save-name" type="button">Save</button>
+        </div>
       </section>
 
       <!-- Focus Timer -->
@@ -28,6 +37,12 @@
         <div id="timer-ended" class="timer-ended-indicator" hidden aria-live="assertive">
           Session complete!
         </div>
+        <div class="duration-row">
+          <label for="duration-input" class="sr-only">Timer duration in minutes</label>
+          <input id="duration-input" type="number" min="1" max="180" value="25" aria-describedby="duration-error" />
+          <button id="btn-set-duration" type="button">Set</button>
+        </div>
+        <p id="duration-error" class="validation-error" role="alert" aria-live="polite"></p>
       </section>
 
       <!-- To-Do List -->
@@ -43,6 +58,14 @@
             aria-describedby="todo-error"
           />
           <button id="btn-add-todo" type="button">Add</button>
+        </div>
+        <div class="sort-row">
+          <label for="task-sort" class="sr-only">Sort tasks by</label>
+          <select id="task-sort" aria-label="Sort tasks">
+            <option value="creation">Creation order</option>
+            <option value="completed-last">Completed last</option>
+            <option value="alpha">Alphabetical (A–Z)</option>
+          </select>
         </div>
         <p id="todo-error" class="validation-error" role="alert" aria-live="polite"></p>
         <ul id="task-list" aria-label="Task list"></ul>

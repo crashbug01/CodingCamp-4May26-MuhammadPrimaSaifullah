@@ -4,11 +4,12 @@
  *
  * Sections:
  *   1. StorageService   — localStorage wrapper (Task 3)
- *   2. GreetingWidget   — time / date / greeting display (Task 4)
- *   3. FocusTimer       — 25-minute countdown timer (Task 5)
- *   4. TodoList         — task CRUD + rendering (Task 6)
- *   5. QuickLinks       — link CRUD + rendering (Task 8)
- *   6. DashboardApp     — top-level initialiser (Task 9)
+ *   2. ThemeManager     — light/dark theme toggle
+ *   3. GreetingWidget   — time / date / greeting display (Task 4)
+ *   4. FocusTimer       — 25-minute countdown timer (Task 5)
+ *   5. TodoList         — task CRUD + rendering (Task 6)
+ *   6. QuickLinks       — link CRUD + rendering (Task 8)
+ *   7. DashboardApp     — top-level initialiser (Task 9)
  */
 
 (function () {
@@ -66,7 +67,34 @@
   };
 
   /* =========================================================================
-     2. GreetingWidget
+     2. ThemeManager
+     Stateless utility that reads/writes the theme preference and applies it
+     to the DOM via the data-theme attribute on <html>.
+     Storage key: "tld_theme"
+     ========================================================================= */
+
+  var ThemeManager = {
+    _updateToggleLabel: function(theme) {
+      var btn = document.getElementById('btn-theme-toggle');
+      if (btn) btn.textContent = theme === 'dark' ? 'Light Mode' : 'Dark Mode';
+    },
+    loadTheme: function() {
+      var stored = StorageService.get('tld_theme');
+      var theme = (stored === 'dark') ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+      ThemeManager._updateToggleLabel(theme);
+    },
+    toggle: function() {
+      var current = document.documentElement.getAttribute('data-theme') || 'light';
+      var next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      StorageService.set('tld_theme', next);
+      ThemeManager._updateToggleLabel(next);
+    }
+  };
+
+  /* =========================================================================
+     3. GreetingWidget
      Displays the current time (HH:MM), date, and a time-based greeting.
      Updates every 60 seconds via setInterval.
      ========================================================================= */
@@ -124,21 +152,40 @@
       var timeEl = root.querySelector('#time');
       var dateEl = root.querySelector('#date');
       var greetingEl = root.querySelector('#greeting');
+      var nameInput = root.querySelector('#name-input');
+      var btnSaveName = root.querySelector('#btn-save-name');
+
+      var storedName = StorageService.get('tld_name') || '';
+      if (nameInput) nameInput.value = storedName;
 
       function render() {
         var now = new Date();
         if (timeEl) timeEl.textContent = GreetingWidget.formatTime(now);
         if (dateEl) dateEl.textContent = GreetingWidget.formatDate(now);
-        if (greetingEl) greetingEl.textContent = GreetingWidget.getGreeting(now.getHours());
+        if (greetingEl) greetingEl.textContent = GreetingWidget.getGreeting(now.getHours()) + (storedName ? ', ' + storedName : '');
       }
 
       render();
       setInterval(render, 60000);
+
+      if (btnSaveName) {
+        btnSaveName.addEventListener('click', function () {
+          var trimmed = nameInput ? nameInput.value.trim() : '';
+          if (trimmed) {
+            StorageService.set('tld_name', trimmed);
+            storedName = trimmed;
+          } else {
+            StorageService.remove('tld_name');
+            storedName = '';
+          }
+          render();
+        });
+      }
     }
   };
 
   /* =========================================================================
-     3. FocusTimer
+     4. FocusTimer
      25-minute (1500 s) Pomodoro-style countdown timer.
      Buttons: Start, Stop, Reset.
      ========================================================================= */
@@ -157,11 +204,18 @@
       var btnStop      = root.querySelector('#btn-stop');
       var btnReset     = root.querySelector('#btn-reset');
       var timerEnded   = root.querySelector('#timer-ended');
+      var durationInput  = root.querySelector('#duration-input');
+      var btnSetDuration = root.querySelector('#btn-set-duration');
+      var durationError  = root.querySelector('#duration-error');
 
       /* --- Internal state --- */
-      var remainingSeconds = 1500;
+      var rawDuration = StorageService.get('tld_timer_duration');
+      var configuredMinutes = (typeof rawDuration === 'number' && Number.isInteger(rawDuration) && rawDuration >= 1 && rawDuration <= 180) ? rawDuration : 25;
+      var remainingSeconds = configuredMinutes * 60;
       var intervalId       = null;
       var isRunning        = false;
+
+      if (durationInput) durationInput.value = configuredMinutes;
 
       /* --- Helpers --- */
 
@@ -185,6 +239,13 @@
       function updateButtons() {
         if (btnStart) btnStart.disabled = isRunning;
         if (btnStop)  btnStop.disabled  = !isRunning;
+        updateDurationInput();
+      }
+
+      /** Enable/disable duration input based on isRunning. */
+      function updateDurationInput() {
+        if (durationInput) durationInput.disabled = isRunning;
+        if (btnSetDuration) btnSetDuration.disabled = isRunning;
       }
 
       /* --- Actions --- */
@@ -213,12 +274,28 @@
         updateButtons();
       }
 
-      /** Reset the timer to 25:00 and hide the session-complete indicator. */
+      /** Reset the timer to configured duration and hide the session-complete indicator. */
       function reset() {
         stop();
-        remainingSeconds = 1500;
+        remainingSeconds = configuredMinutes * 60;
         updateDisplay();
         if (timerEnded) timerEnded.setAttribute('hidden', '');
+      }
+
+      /**
+       * Set a new timer duration. Validates [1,180], persists, and resets display.
+       * @param {string|number} minutes
+       */
+      function setDuration(minutes) {
+        var parsed = Number(minutes);
+        if (!Number.isInteger(parsed) || parsed < 1 || parsed > 180) {
+          if (durationError) durationError.textContent = 'Duration must be a whole number between 1 and 180.';
+          return;
+        }
+        if (durationError) durationError.textContent = '';
+        configuredMinutes = parsed;
+        StorageService.set('tld_timer_duration', configuredMinutes);
+        reset();
       }
 
       /* --- Event bindings --- */
@@ -226,14 +303,22 @@
       if (btnStop)  btnStop.addEventListener('click', stop);
       if (btnReset) btnReset.addEventListener('click', reset);
 
+      if (btnSetDuration) btnSetDuration.addEventListener('click', function () {
+        setDuration(durationInput ? durationInput.value : '');
+      });
+      if (durationInput) durationInput.addEventListener('input', function () {
+        if (durationError) durationError.textContent = '';
+      });
+
       /* --- Initial state --- */
       if (btnStop) btnStop.disabled = true;
       updateDisplay();
+      updateDurationInput();
     }
   };
 
   /* =========================================================================
-     4. TodoList
+     5. TodoList
      Persistent task management: add, edit, toggle completion, delete.
      Storage key: "tld_tasks"
      ========================================================================= */
@@ -248,12 +333,15 @@
 
       /* --- State --- */
       var tasks = StorageService.get('tld_tasks') || [];
+      var currentSort = StorageService.get('tld_task_sort') || 'creation';
 
       /* --- DOM references --- */
       var todoInput  = root.querySelector('#todo-input');
       var btnAddTodo = root.querySelector('#btn-add-todo');
       var todoError  = root.querySelector('#todo-error');
       var taskList   = root.querySelector('#task-list');
+      var taskSort   = root.querySelector('#task-sort');
+      if (taskSort) taskSort.value = currentSort;
 
       /* --- Helpers --- */
 
@@ -273,16 +361,58 @@
           : Date.now().toString();
       }
 
-      /* --- Actions --- */
+      /**
+       * Check if a task with the same text already exists (case-insensitive).
+       * @param {string} text
+       * @returns {boolean}
+       */
+      function isDuplicate(text) {
+        return tasks.some(function (t) {
+          return t.text.trim().toLowerCase() === text.trim().toLowerCase();
+        });
+      }
 
       /**
-       * Add a new task. Rejects empty/whitespace-only text.
+       * Return a sorted copy of the tasks array based on currentSort.
+       * @returns {Array}
+       */
+      function getSortedTasks() {
+        if (currentSort === 'alpha') {
+          return tasks.slice().sort(function (a, b) {
+            return a.text.toLowerCase().localeCompare(b.text.toLowerCase());
+          });
+        }
+        if (currentSort === 'completed-last') {
+          return tasks.slice().sort(function (a, b) {
+            if (a.completed === b.completed) return 0;
+            return a.completed ? 1 : -1;
+          });
+        }
+        return tasks.slice(); // 'creation' — preserve insertion order
+      }
+
+      /**
+       * Update the active sort order, persist it, and re-render.
+       * @param {string} sortValue
+       */
+      function setSort(sortValue) {
+        currentSort = sortValue;
+        StorageService.set('tld_task_sort', currentSort);
+        renderAll();
+      }
+
+      /**
+       * Add a new task. Rejects empty/whitespace-only text and duplicates.
        * @param {string} text
        */
       function addTask(text) {
         var trimmed = text.trim();
         if (!trimmed) {
           if (todoError) todoError.textContent = 'Task cannot be empty.';
+          return;
+        }
+        if (isDuplicate(trimmed)) {
+          if (todoError) todoError.textContent = 'A task with this name already exists.';
           return;
         }
         if (todoError) todoError.textContent = '';
@@ -331,11 +461,11 @@
         renderAll();
       }
 
-      /** Re-render the entire task list. */
+      /** Re-render the entire task list in the current sort order. */
       function renderAll() {
         if (!taskList) return;
         taskList.innerHTML = '';
-        tasks.forEach(function (task) { renderTask(task); });
+        getSortedTasks().forEach(function (task) { renderTask(task); });
       }
 
       /**
@@ -424,13 +554,17 @@
         });
       }
 
+      if (taskSort) taskSort.addEventListener('change', function () {
+        setSort(taskSort.value);
+      });
+
       /* --- Initial render --- */
       renderAll();
     }
   };
 
   /* =========================================================================
-     5. QuickLinks
+     6. QuickLinks
      Persistent URL shortcut panel: add, open in new tab, delete.
      Storage key: "tld_links"
      ========================================================================= */
@@ -578,13 +712,18 @@
   };
 
   /* =========================================================================
-     6. DashboardApp
+     7. DashboardApp
      Top-level initialiser — wires each widget to its container element.
      ========================================================================= */
 
   var DashboardApp = {
     /** Initialise all widgets. Called on DOMContentLoaded. */
     init: function () {
+      ThemeManager.loadTheme();
+
+      var btnThemeToggle = document.getElementById('btn-theme-toggle');
+      if (btnThemeToggle) btnThemeToggle.addEventListener('click', ThemeManager.toggle);
+
       var greetingEl = document.getElementById('greeting-widget');
       var timerEl    = document.getElementById('focus-timer');
       var todoEl     = document.getElementById('todo-list');
