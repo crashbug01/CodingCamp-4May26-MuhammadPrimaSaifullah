@@ -31,3 +31,8 @@ A comprehensive, browser-based dashboard designed to streamline your daily workf
 
 - Favorites Bar: Instant access to your most-visited websites.
 - Saved Preferences: Links are stored locally for a personalized browsing experience.
+
+<strong>UI/UX Enhancements</strong>
+
+- Light/Dark Mode: Toggle between themes to reduce eye strain.
+- Responsive Design: Optimized for a variety of screen sizes.
